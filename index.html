@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект: Адаптивный сайт</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset и базовые стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        /* Mobile-first стили */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Шапка с видео */
+        header {
+            position: relative;
+            height: 100vh;
+            min-height: 500px;
+            overflow: hidden;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        #header-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            max-width: 800px;
+        }
+        
+        .header-content h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Навигация - мобильная версия */
+        nav {
+            background-color: #333;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .menu-toggle {
+            display: block;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .main-menu {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            z-index: 1000;
+        }
+        
+        .main-menu.active {
+            display: flex;
+        }
+        
+        .main-menu li {
+            position: relative;
+        }
+        
+        .main-menu a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid #444;
+            transition: background-color 0.3s;
+        }
+        
+        .main-menu a:hover {
+            background-color: #444;
+        }
+        
+        /* Десктопная версия меню */
+        @media (min-width: 768px) {
+            .menu-toggle {
+                display: none;
+            }
+            
+            .main-menu {
+                display: flex !important;
+                flex-direction: row;
+                position: static;
+                width: auto;
+                background: none;
+            }
+            
+            .main-menu a {
+                border-bottom: none;
+                padding: 10px 15px;
+            }
+            
+            /* Выпадающее подменю для десктопа */
+            .has-submenu:hover .submenu {
+                display: block;
+            }
+            
+            .submenu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: #333;
+                min-width: 200px;
+                list-style: none;
+                padding: 10px 0;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+            
+            .submenu li {
+                width: 100%;
+            }
+            
+            .submenu a {
+                padding: 10px 20px;
+                white-space: nowrap;
+            }
+        }
+        
+        /* Основной контент */
+        main {
+            padding: 60px 0;
+        }
+        
+        section {
+            margin-bottom: 60px;
+        }
+        
+        h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #222;
+        }
+        
+        .section-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        /* Карточки */
+        .cards-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .cards-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-img {
+            height: 200px;
+            background-color: #4a6fa5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .card h3 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        /* Зимний слайдер :) */
+.slider-section {
+    margin: 60px 0;
+    padding: 0 20px;
+}
+
+.gallery-slider {
+    max-width: 1000px;
+    margin: 40px auto;
+    position: relative;
+}
+
+.slider-wrapper {
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+    position: relative;
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slider-item {
+    min-width: 100%;
+    position: relative;
+}
+
+.image-container {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    position: relative;
+}
+
+.slider-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s ease;
+}
+
+.slider-item:hover .slider-img {
+    transform: scale(1.03);
+}
+
+.caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    color: white;
+    padding: 30px 40px 25px;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.slider-item:hover .caption {
+    padding-bottom: 30px;
+    background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+}
+
+.caption h3 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.caption p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Кнопки управления */
+.slider-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding: 0 10px;
+}
+
+.control-btn {
+    background: #4a6fa5;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(74, 111, 165, 0.3);
+}
+
+.control-btn:hover {
+    background: #166088;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(74, 111, 165, 0.4);
+}
+
+.control-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Точки */
+.slider-dots {
+    display: flex;
+    gap: 12px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ddd;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.dot.active {
+    background: #4a6fa5;
+    transform: scale(1.3);
+}
+
+.dot:hover {
+    background: #aaa;
+    transform: scale(1.2);
+}
+
+/* Счетчик */
+.slider-counter {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .slider-section {
+        padding: 0 15px;
+        margin: 40px 0;
+    }
+    
+    .image-container {
+        height: 400px;
+    }
+    
+    .caption {
+        padding: 20px 25px 15px;
+    }
+    
+    .caption h3 {
+        font-size: 1.5rem;
+    }
+    
+    .caption p {
+        font-size: 1rem;
+    }
+    
+    .control-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-container {
+        height: 300px;
+    }
+    
+    .caption {
+        padding: 15px 20px 10px;
+    }
+    
+    .caption h3 {
+        font-size: 1.3rem;
+    }
+    
+    .slider-controls {
+        margin-top: 20px;
+    }
+    
+    .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+        
+        /* Форма */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #4a6fa5;
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            background-color: #166088;
+        }
+        
+        .submit-btn:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .form-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        /* Кнопка "Связь с нами" */
+        .contact-btn-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .contact-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .contact-btn:hover {
+            background-color: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+	.slider-btn {
+    background-color: #4a6fa5;
+    color: white;
+    text-decoration: none;
+    padding: 15px 35px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 5px 15px rgba(74, 111, 165, 0.3);
+}
+
+.slider-btn:hover {
+    background-color: #166088;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(74, 111, 165, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.slider-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(74, 111, 165, 0.3);
+}
+
+/* Адаптивность для кнопки */
+@media (max-width: 768px) {
+    .slider-btn {
+        padding: 12px 28px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider-btn {
+        padding: 10px 24px;
+        font-size: 0.95rem;
+    }
+}
+        
+        /* Модальное окно формы */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #777;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        /* Футер */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0 30px;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #4a6fa5;
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Анимации для меню */
+        @media (max-width: 767px) {
+            .main-menu {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease;
+            }
+            
+            .main-menu.active {
+                max-height: 500px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .submenu {
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: opacity 0.3s, transform 0.3s;
+            }
+            
+            .has-submenu:hover .submenu {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка с видео -->
+    <header>
+        <video autoplay muted loop id="header-video">
+            <!-- В реальном проекте здесь будет video.mp4 -->
+            <source src="video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        <div class="video-overlay"></div>
+        <div class="header-content">
+            <h1>Добро пожаловать на мой сайт</h1>
+            <p>Современный адаптивный веб-сайт с интерактивными элементами, созданный с использованием mobile-first подхода.</p>
+            <a href="#main-content" class="slider-btn">Узнать больше</a>
+        </div>
+    </header>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo">Проект Копылова</a>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="main-menu" id="mainMenu">
+                <li><a href="#main-content">Главная</a></li>
+                <li class="has-submenu">
+                    <ul class="submenu">
+                        <li><a href="#web">Веб-разработка</a></li>
+                        <li><a href="#design">Дизайн</a></li>
+                        <li><a href="#seo">SEO оптимизация</a></li>
+                    </ul>
+                </li>
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#portfolio">Портфолио</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="container" id="main-content">
+        <!-- Секция "О нас" -->
+        <section id="about">
+            <h2>О моей работе</h2>
+            <p class="section-intro">В данном проекте я реализовал все требования проекта, создав современный адаптивный веб-сайт с видео-шапкой, 
+                    интерактивным меню, слайдером проектов, контактными формами и анимированными элементами..</p>
+            
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-img">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Веб-разработка</h3>
+                        <p>Создание современного и функционального веб-сайта с использованием передовых технологий.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Адаптивный дизайн</h3>
+                        <p>Разработка дизайна, который идеально отображается на всех устройствах от смартфонов до десктопов.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Оптимизация</h3>
+                        <p>Повышение скорости загрузки и улучшение пользовательского опыта для моего сайта.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция со слайдером -->
+        <section id="portfolio">
+            <h2> Зимний слайдер :) </h2>    
+<div class="slider-section">  
+    <div class="gallery-slider">
+        <!-- Контейнер слайдера -->
+        <div class="slider-wrapper">
+            <div class="slider-track" id="sliderTrack">
+                <!-- Слайды -->
+                <div class="slider-item">
+                    <div class="image-container">
+                        <img src="зима1.jpg" alt="Зимний пейзаж 1" class="slider-img">
+                    </div>
+                    <div class="caption">
+                    </div>
+                </div>
+                
+                <div class="slider-item">
+                    <div class="image-container">
+                        <img src="зима2.jpg" alt="Зимний пейзаж 2" class="slider-img">
+                    </div>
+                    <div class="caption">
+                    </div>
+                </div>
+                
+                <div class="slider-item">
+                    <div class="image-container">
+                        <img src="зима3.jpg" alt="Зимний пейзаж 3" class="slider-img">
+                    </div>
+                    <div class="caption">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Кнопки управления -->
+        <div class="slider-controls">
+            <button class="control-btn prev-btn" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="slider-dots" id="sliderDots">
+                <!-- Точки будут созданы JavaScript -->
+            </div>
+            
+            <button class="control-btn next-btn" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <!-- Счетчик -->
+        <div class="slider-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">3</span>
+        </div>
+    </div>
+</div>
+            
+
+        </section>
+
+        <!-- Кнопка "Связь с нами" -->
+        <div class="contact-btn-container">
+            <button class="contact-btn" id="contactBtn">
+                <i class="fas fa-envelope"></i> Связь с нами
+            </button>
+        </div>
+
+        <!-- Основная форма -->
+        <section id="contact">
+            <h2>Свяжитесь с нами</h2>
+            <p class="section-intro">Заполните форму ниже, и мы свяжемся с вами в ближайшее время для обсуждения вашего проекта.</p>
+            
+            <div class="form-container">
+                <form id="mainForm">
+                    <div class="form-group">
+                        <label for="name">Ваше имя *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email адрес *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Сообщение *</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span id="btnText">Отправить сообщение</span>
+                        <div class="spinner" id="spinner" style="display: none;"></div>
+                    </button>
+                    
+                    <div class="form-message" id="formMessage"></div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно формы -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <h2>Быстрая связь с нами</h2>
+            <p>Заполните эту форму, и мы перезвоним вам в течение 30 минут.</p>
+            
+            <form id="modalForm" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label for="modalName">Ваше имя *</label>
+                    <input type="text" id="modalName" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modalPhone">Телефон *</label>
+                    <input type="tel" id="modalPhone" name="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modalMessage">Краткое описание задачи</label>
+                    <textarea id="modalMessage" name="message" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="modalSubmitBtn">
+                    <span id="modalBtnText">Заказать звонок</span>
+                    <div class="spinner" id="modalSpinner" style="display: none;"></div>
+                </button>
+                
+                <div class="form-message" id="modalFormMessage"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container footer-content">
+            <p>Проект: Адаптивный веб-сайт с интерактивными элементами</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <p class="copyright">© 2025 Все права защищены. Сайт создан в учебных целях.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Мобильное меню
+        const menuToggle = document.getElementById('menuToggle');
+        const mainMenu = document.getElementById('mainMenu');
+        
+        menuToggle.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            menuToggle.innerHTML = mainMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Закрытие меню при клике на пункт (для мобильных)
+        const menuLinks = document.querySelectorAll('.main-menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 768) {
+                    mainMenu.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+        
+        // Слайдер
+// ===== JAVASCRIPT ДЛЯ СЛАЙДЕРА =====
+document.addEventListener('DOMContentLoaded', function() {
+    const sliderTrack = document.getElementById('sliderTrack');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const sliderDots = document.getElementById('sliderDots');
+    const currentSlideEl = document.getElementById('currentSlide');
+    const totalSlidesEl = document.getElementById('totalSlides');
+    
+    const slides = document.querySelectorAll('.slider-item');
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    
+    // Инициализация
+    totalSlidesEl.textContent = totalSlides;
+    createDots();
+    updateSlider();
+    
+    // Создание точек
+    function createDots() {
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'dot';
+            dot.setAttribute('data-slide', i);
+            dot.addEventListener('click', () => goToSlide(i));
+            sliderDots.appendChild(dot);
+        }
+    }
+    
+    // Обновление слайдера
+    function updateSlider() {
+        sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Обновление точек
+        document.querySelectorAll('.dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+        
+        // Обновление счетчика
+        currentSlideEl.textContent = currentSlide + 1;
+    }
+    
+    // Переход к слайду
+    function goToSlide(slideIndex) {
+        currentSlide = slideIndex;
+        updateSlider();
+    }
+    
+    // Следующий слайд
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlider();
+    }
+    
+    // Предыдущий слайд
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateSlider();
+    }
+    
+    // Обработчики событий
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    
+    // Автопрокрутка (по желанию)
+    let autoplayInterval = setInterval(nextSlide, 5000);
+    
+    // Остановка автопрокрутки при наведении
+    const sliderContainer = document.querySelector('.slider-wrapper');
+    sliderContainer.addEventListener('mouseenter', () => {
+        clearInterval(autoplayInterval);
+    });
+    
+    sliderContainer.addEventListener('mouseleave', () => {
+        clearInterval(autoplayInterval);
+        autoplayInterval = setInterval(nextSlide, 5000);
+    });
+    
+    // Поддержка свайпов на мобильных
+    let startX = 0;
+    let endX = 0;
+    
+    sliderTrack.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+    
+    sliderTrack.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                nextSlide(); // Свайп влево
+            } else {
+                prevSlide(); // Свайп вправо
+            }
+        }
+    }
+});
+        
+        // Основная форма
+        const mainForm = document.getElementById('mainForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const spinner = document.getElementById('spinner');
+        const formMessage = document.getElementById('formMessage');
+        
+        // Загрузка данных из LocalStorage
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedName = localStorage.getItem('formName');
+            const savedEmail = localStorage.getItem('formEmail');
+            const savedMessage = localStorage.getItem('formMessage');
+            
+            if (savedName) document.getElementById('name').value = savedName;
+            if (savedEmail) document.getElementById('email').value = savedEmail;
+            if (savedMessage) document.getElementById('message').value = savedMessage;
+        });
+        
+        mainForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Сохранение в LocalStorage
+            localStorage.setItem('formName', document.getElementById('name').value);
+            localStorage.setItem('formEmail', document.getElementById('email').value);
+            localStorage.setItem('formMessage', document.getElementById('message').value);
+            
+            // Блокировка кнопки и показ спиннера
+            submitBtn.disabled = true;
+            btnText.textContent = 'Отправка...';
+            spinner.style.display = 'block';
+            formMessage.style.display = 'none';
+            
+            // Имитация отправки на сервер
+            try {
+                // В реальном проекте здесь будет fetch на сервер форм
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Симуляция успешной отправки
+                const success = Math.random() > 0.2; // 80% успешных отправок
+                
+                if (success) {
+                    formMessage.textContent = 'Сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.';
+                    formMessage.className = 'form-message success';
+                    
+                    // Очистка формы после успешной отправки
+                    mainForm.reset();
+                    localStorage.removeItem('formName');
+                    localStorage.removeItem('formEmail');
+                    localStorage.removeItem('formMessage');
+                } else {
+                    throw new Error('Ошибка при отправке формы');
+                }
+            } catch (error) {
+                formMessage.textContent = 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.';
+                formMessage.className = 'form-message error';
+            } finally {
+                // Восстановление кнопки
+                submitBtn.disabled = false;
+                btnText.textContent = 'Отправить сообщение';
+                spinner.style.display = 'none';
+                formMessage.style.display = 'block';
+            }
+        });
+        
+        // Модальное окно
+        const contactBtn = document.getElementById('contactBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModal = document.getElementById('closeModal');
+        const modalForm = document.getElementById('modalForm');
+        const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+        const modalBtnText = document.getElementById('modalBtnText');
+        const modalSpinner = document.getElementById('modalSpinner');
+        const modalFormMessage = document.getElementById('modalFormMessage');
+        
+        // Анимация открытия модального окна с requestAnimationFrame
+        function openModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Блокировка прокрутки
+            
+            // Сохранение состояния в History API
+            if (history.pushState) {
+                history.pushState({ modalOpen: true }, '', '#contact-modal');
+            }
+        }
+        
+        function closeModalFunc() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Восстановление прокрутки
+            
+            // Возврат в истории
+            if (history.pushState && window.location.hash === '#contact-modal') {
+                history.back();
+            }
+        }
+        
+        contactBtn.addEventListener('click', openModal);
+        closeModal.addEventListener('click', closeModalFunc);
+        
+        // Закрытие модального окна при клике на overlay
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModalFunc();
+            }
+        });
+        
+        // Обработка кнопки "Назад" браузера
+        window.addEventListener('popstate', function(e) {
+            if (modalOverlay.classList.contains('active')) {
+                closeModalFunc();
+            }
+        });
+        
+        // Форма в модальном окне
+        modalForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Блокировка кнопки и показ спиннера
+            modalSubmitBtn.disabled = true;
+            modalBtnText.textContent = 'Отправка...';
+            modalSpinner.style.display = 'block';
+            modalFormMessage.style.display = 'none';
+            
+            // Имитация отправки на сервер
+            try {
+                // В реальном проекте здесь будет fetch на сервер форм
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Симуляция успешной отправки
+                const success = Math.random() > 0.2; // 80% успешных отправок
+                
+                if (success) {
+                    modalFormMessage.textContent = 'Ваша заявка принята! Мы перезвоним вам в течение 30 минут.';
+                    modalFormMessage.className = 'form-message success';
+                    
+                    // Очистка формы после успешной отправки
+                    modalForm.reset();
+                } else {
+                    throw new Error('Ошибка при отправке формы');
+                }
+            } catch (error) {
+                modalFormMessage.textContent = 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.';
+                modalFormMessage.className = 'form-message error';
+            } finally {
+                // Восстановление кнопки
+                modalSubmitBtn.disabled = false;
+                modalBtnText.textContent = 'Заказать звонок';
+                modalSpinner.style.display = 'none';
+                modalFormMessage.style.display = 'block';
+            }
+        });
+        
+        // Плавная прокрутка к якорям
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                if (href === '#') return;
+                
+                if (href.startsWith('#') && href.length > 1) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
